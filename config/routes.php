@@ -44,7 +44,7 @@ return [
     'tasa_cambio' => [
         'vista' => 'tasa_cambio/tasa_cambio.php',
         'menu'  => true,
-        'roles' => [ 'gerente']
+        'roles' => [ '*','gerente']
     ],
         
         
