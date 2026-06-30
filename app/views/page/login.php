@@ -1,4 +1,6 @@
+
 <div class="limiter">
+    <link rel="stylesheet" href="resources/library/css/login-style.css">
     <div class="login-page">
         <div class="login-box">
             <div class="logo">
@@ -47,5 +49,7 @@
         </div>    
     </div>    
 </div> 
-<script src="resources/library/plugins/jquery/jquery.min.js"></script>
-<script src="public/js/login.js"></script>
+
+<script src="/templateSoftware/resources/library/plugins/jquery/jquery.min.js"></script>
+<script src="/templateSoftware/public/js/login.js">
+

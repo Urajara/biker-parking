@@ -1,0 +1,112 @@
+/* ==========================================================================
+   ESTILOS INTERFAZ HOME - POLE POSITION
+   ========================================================================== */
+
+/* Fondo general de la sección de contenido (Fondo Blanco Limpio) */
+section.content {
+    background-color: #ffffff !important;
+    min-height: 100vh;
+}
+
+/* El contenedor del título "Home" */
+.block-header h2 {
+    color: #333333 !important;
+    font-weight: 400;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+/* --- TRANSFORMACIÓN DE LA TARJETA EN BANNER ROJO --- */
+/* Eliminamos el borde y el fondo blanco por defecto de la tarjeta */
+section.content .card {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* Convertimos el 'header' de la tarjeta en el banner rojo F1 */
+section.content .card .header {
+    background-color: #d91a1a !important; /* El rojo intenso de tu logo */
+    padding: 30px 25px !important;
+    border-radius: 4px !important;
+    border-bottom: none !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15) !important; /* Sombra inferior */
+}
+
+/* Estilos para el texto interno del banner */
+section.content .card .header h2 {
+    color: #ffffff !important;
+    font-size: 24px !important;
+    font-weight: 500 !important;
+    margin: 0 !important;
+    line-height: 1.4 !important;
+}
+
+/* Estilos para el subtítulo (Informacion) */
+section.content .card .header h2 small {
+    color: #fcdede !important; /* Color blanco/rosado suave de fondo */
+    font-size: 14px !important;
+    margin-top: 8px !important;
+    display: block !important;
+}
+/* ==========================================================================
+   EFECTO HOVER EN ROJO PARA EL MENÚ DE NAVEGACIÓN
+   ========================================================================== */
+
+/* Cambia el texto e icono a color rojo al pasar el cursor sobre la opción */
+.sidebar .menu .list li a:hover,
+.sidebar .menu .list li a:hover i {
+    color: #d91a1a !important; /* Rojo intenso Pole Position */
+    background-color: rgba(0, 0, 0, 0.02) !important; /* Un sutil fondo gris casi imperceptible */
+    transition: all 0.3s ease; /* Hace que el cambio de color sea suave */
+}
+
+/* Si tu plantilla usa la clase 'sidebar-menu' en lugar de '.menu .list' */
+.sidebar-menu li a:hover,
+.sidebar-menu li a:hover i {
+    color: #d91a1a !important;
+    background-color: rgba(0, 0, 0, 0.02) !important;
+    transition: all 0.3s ease;
+}
+/* ==========================================================================
+   CORRECCIÓN ESTRUCTURAL DEL MENÚ LATERAL (SCROLL Y FOOTER)
+   ========================================================================== */
+
+/* 1. Forzamos a la barra lateral a comportarse como un contenedor Flexbox */
+.sidebar {
+    height: 100vh !important;       /* Ocupa exactamente el alto de la pantalla */
+    display: flex !important;
+    flex-direction: column !important;
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    z-index: 11;
+}
+
+/* 2. Convertimos el área de menú en la zona elástica con scroll */
+.sidebar .menu {
+    flex: 1 !important;             /* Toma todo el espacio libre que quede en el medio */
+    overflow-y: auto !important;    /* ACTIVA EL SCROLL VERTICAL AQUÍ */
+    margin-top: 15px;
+}
+
+/* 3. Aseguramos que el contenedor de la lista de enlaces no rompa el diseño */
+.sidebar .menu .list {
+    margin: 0 !important;
+    padding-bottom: 20px !important; /* Espacio extra al final para que respire el último botón */
+}
+/* Textura técnica de fondo para el área de contenido */
+.content-wrapper, .main-content, section.content {
+    background-color: #f4f5f7 !important;
+    background-image: 
+        radial-gradient(#e0e3e8 1px, transparent 1px), 
+        radial-gradient(#e0e3e8 1px, transparent 1px);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+}
+
+/* Forzar que las tablas hereden una fuente limpia */
+.table th, .table td {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    vertical-align: middle !important;
+}

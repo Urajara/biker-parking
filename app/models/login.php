@@ -20,8 +20,7 @@
 				$conexion = new Conexion();
 				$conex = $conexion->conectar();
 
-				$sql = ("SELECT * FROM estudiante a
-							WHERE a.cedula = :cedula");
+				$sql = ("SELECT cedula,password,estatus,id_rol FROM usuarios a WHERE a.cedula = :cedula");
 
 				$stmt = $conex->prepare($sql);
 				$stmt->bindparam(":cedula", $this->usuario, PDO::PARAM_STR);

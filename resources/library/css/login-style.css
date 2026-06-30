@@ -1,0 +1,208 @@
+/* ==========================================================================
+   INTERCEPTOR CSS - LOG IN POLE POSITION (MANTIENE FUNCIONALIDAD HTML)
+   ========================================================================== */
+
+/* 1. Fondo general texturizado de la pantalla */
+body.login-page {
+    background-color: #f7f7f7 !important;
+    background-image: radial-gradient(#e3e3e3 1px, transparent 1px) !important;
+    background-size: 20px 20px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    height: 100vh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-family: Arial, sans-serif !important;
+}
+
+/* Forzar que el limiter ocupe todo el espacio de forma flexible */
+.limiter {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+/* 2. Caja contenedora de la tarjeta */
+.login-box {
+    margin: 0 auto !important;
+    max-width: 380px !important;
+    width: 100% !important;
+    padding-bottom: 30px !important; /* Espacio para la bandera inferior */
+    position: relative !important;
+}
+
+/* Inyectar dinámicamente la marca de agua "Pole Position" arriba a la derecha */
+body.login-page::before {
+    content: "Pole Position" !important;
+    position: absolute !important;
+    top: 20px !important;
+    right: 40px !important;
+    font-size: 32px !important;
+    font-weight: bold !important;
+    color: #cccccc !important;
+    opacity: 0.5 !important;
+    user-select: none !important;
+}
+
+/* 3. Transformación de la tarjeta original */
+.login-box .card {
+    background: #ffffff !important;
+    border-radius: 8px !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
+    overflow: hidden !important;
+    border: none !important;
+    position: relative !important;
+}
+
+/* Agregar el encabezado gris superior con el logo simulado usando pseudo-elementos */
+.login-box .card::before {
+    content: "Iniciar Sesión" !important;
+    display: block !important;
+    background-color: #f0f0f0 !important;
+    text-align: center !important;
+    padding: 20px !important;
+    font-size: 24px !important;
+    color: #333333 !important;
+    font-weight: normal !important;
+    border-bottom: 1px solid #e0e0e0 !important;
+}
+
+/* Estilo para el contenedor interno del formulario */
+.login-box .card .body {
+    padding: 30px 30px 20px 30px !important;
+}
+
+/* Mensaje secundario de Iniciar Sesión */
+.login-box .card .body .msg {
+    text-align: center !important;
+    font-size: 16px !important;
+    color: #666666 !important;
+    margin-bottom: 25px !important;
+    margin-top: 0 !important;
+}
+
+/* 4. Estilización moderna de las filas de campos de entrada (Línea inferior) */
+.login-box .input-group {
+    display: flex !important;
+    align-items: center !important;
+    border-bottom: 1px solid #cccccc !important;
+    margin-bottom: 25px !important;
+    width: 100% !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+/* Quitar los bloques e iconos cuadrados grises nativos de Bootstrap */
+.login-box .input-group .input-group-addon {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 10px 0 0 !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.login-box .input-group .input-group-addon i.material-icons {
+    color: #333333 !important;
+    font-size: 22px !important;
+}
+
+/* Quitar líneas animadas de la plantilla materialize base */
+.login-box .form-line {
+    border: none !important;
+    width: 100% !important;
+    background: transparent !important;
+}
+.login-box .form-line::after, .login-box .form-line::before {
+    display: none !important;
+}
+
+/* Inputs limpios sin bordes */
+.login-box .form-control {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    padding: 8px 5px !important;
+    font-size: 15px !important;
+    color: #333333 !important;
+    height: auto !important;
+}
+
+/* Mover el switch "Mostrar" a la extrema derecha del input de contraseña */
+.login-box .input-group .input-group-addon:has(.switch) {
+    position: absolute !important;
+    right: 0 !important;
+    padding: 0 !important;
+}
+
+.login-box .switch, .login-box .switch label {
+    font-size: 13px !important;
+    color: #666666 !important;
+    cursor: pointer !important;
+}
+
+/* Ocultar la palanca azul vieja si estorba visualmente */
+.login-box .switch .lever {
+    background-color: #cccccc !important;
+}
+.login-box .switch input[type=checkbox]:checked+.lever {
+    background-color: #fcdede !important;
+}
+.login-box .switch input[type=checkbox]:checked+.lever:after {
+    background-color: #d91a1a !important;
+}
+
+/* 5. Transformación del Botón a Rojo Pole Position */
+#Ingresar {
+    background-color: #d91a1a !important; /* Rojo F1 */
+    color: #ffffff !important;
+    border: none !important;
+    width: 100% !important;
+    padding: 12px !important;
+    font-size: 15px !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    font-weight: bold !important;
+    box-shadow: 0 4px 6px rgba(217, 26, 26, 0.2) !important;
+    transition: background 0.2s ease !important;
+    text-transform: uppercase !important;
+}
+
+#Ingresar:hover {
+    background-color: #b81414 !important;
+}
+
+/* 6. Enlace inferior de recuperación */
+.login-box .align-left {
+    display: flex !important;
+    align-items: center !important;
+    margin-top: 15px !important;
+}
+
+.login-box .align-left i.material-icons {
+    font-size: 18px !important;
+    color: #555555 !important;
+    margin-right: 5px !important;
+}
+
+.login-box .align-left a {
+    color: #0066cc !important;
+    text-decoration: none !important;
+    font-size: 13px !important;
+}
+
+/* 7. Inyección de la bandera de cuadros inferior derecha usando CSS */
+.login-box .card::after {
+    content: "" !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    right: 0 !important;
+    width: 140px !important;
+    height: 35px !important;
+    background-image: url('../../../img/fondo/home.png') !important; /* Apunta a tu imagen home.png relativa desde la carpeta css */
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: bottom right !important;
+    pointer-events: none !important;
+}

@@ -19,12 +19,33 @@ return [
     'usuarios' => [
         'vista' => 'usuarios/usuarios.php',
         'menu'  => true,
-        'roles' => ['admin']
+        'roles' => ['*']
     ],
     'reportes' => [
         'vista' => 'reportes/reportes.php',
         'menu'  => true,
-        'roles' => ['admin', 'supervisor']
+        'roles' => ['*', 'supervisor']
     ],
-    
+    'cliente' => [
+        'vista' => 'cliente/cliente.php',
+        'menu'  => true,
+        'roles' => ['*', 'supervisor']
+    ],
+    'moto' => [
+        'vista' => 'moto/moto.php',
+        'menu'  => true,
+        'roles' => ['*', 'supervisor']
+    ],
+    'pago_ticket' => [
+        'vista' => 'pago_ticket/pago_ticket.php',
+        'menu'  => true,
+        'roles' => ['*', 'supervisor']
+    ],
+    'tasa_cambio' => [
+        'vista' => 'tasa_cambio/tasa_cambio.php',
+        'menu'  => true,
+        'roles' => [ 'gerente']
+    ],
+        
+        
 ];

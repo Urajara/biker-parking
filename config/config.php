@@ -6,7 +6,7 @@ if ( isset($_SESSION['database']) ) {
 	$database = $_SESSION['database'];
 } else {
 
-	$database = 'prueba';
+	$database = 'estacionamiento';
     // $database = 'educativo';
 }
 

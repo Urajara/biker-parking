@@ -1,8 +1,9 @@
 <?php
 
-    // define('DEBUG', true);
-    // error_reporting(E_ALL);
-    // ini_set('display_errors', DEBUG ? 'On' : 'Off');
+    // Forzar el encendido de errores para ver si algo falla internamente
+    define('DEBUG', true);
+    error_reporting(E_ALL);
+    ini_set('display_errors', 'On');
 
     require_once '../core/BaseController.php';
     require_once '../models/login.php';
@@ -27,30 +28,58 @@
 
             $login = new loginModel();
             $login->setloginuser($data["usuario"]);
-            // $login->setpassword($data["password"]);
+            $login->setpassword($data["password"]);
             $user = $login->IniciarSesion();
 
-            if (isset($user['datos'][0]) && 
-                $user['datos'][0]['cedula'] == $data["usuario"]) {
+            // Extraemos los datos del primer registro (si es que existe)
+            $datosUsuario = $user['datos'][0] ?? null;
 
-                $this->startSession();
-
-                $_SESSION['id']  = $user['datos'][0]['id'];
-                $_SESSION['cedula']  = $user['datos'][0]['cedula'];
-                $_SESSION['nombre'] = $user['datos'][0]['nombre'];
-                $_SESSION['apellido'] = $user['datos'][0]['apellido'];
-                $_SESSION['session']  = true;
-
+            // 1. PRIMER FILTRO: Si $datosUsuario es null, significa que la cédula no está en la base de datos
+            if (!$datosUsuario) {
                 return $this->jsonResponse([
-                    'success' => true,
-                    'session' => $_SESSION,
-                    'url'     => 'home'
+                    'success' => false,
+                    'error' => 'El número de cédula no existe'
                 ]);
-
-            } else {
-                // Datos incorrectos o usuario no encontrado
-                return $this->jsonResponse(['success' => false, 'error' => 2]);
             }
+
+            // 2. SEGUNDO FILTRO: ¿La contraseña es correcta?
+            if ($datosUsuario['password'] !== $data['password']) {
+                return $this->jsonResponse([
+                    'success' => false,
+                    'error' => 'Contraseña incorrecta'
+                ]);
+            }
+
+            // 3. TERCER FILTRO: Estado del usuario
+            switch ($datosUsuario['estatus']) {
+                case '1':
+                    return $this->jsonResponse(['success' => false, 'error' => 'Usuario inactivo']);
+                case '2':
+                    return $this->jsonResponse(['success' => false, 'error' => 'Usuario bloqueado']);
+                case '0':
+                default:
+                    break;
+            }    
+
+            // 4. FLUJO DE ÉXITO: Guardamos en sesión usando la estructura de tu BaseController
+$this->startSession();
+
+            $_SESSION['id']       = $datosUsuario['id'] ?? '';
+            $_SESSION['cedula']   = $datosUsuario['cedula'];
+            $_SESSION['nombre']   = $datosUsuario['nombre'] ?? ''; 
+            $_SESSION['apellido'] = $datosUsuario['apellido'] ?? ''; 
+            $_SESSION['session']  = true; 
+            $_SESSION['roles']    = $datosUsuario['roles'] ?? ''; 
+            $_SESSION['estatus']  = $datosUsuario['estatus'];
+            $_SESSION['password'] = $datosUsuario['password']; 
+
+            // Mandamos al index pasándole la acción para que EnlacesController la capture
+            return $this->jsonResponse([
+                'success' => true, 
+                'message' => 'Usuario activo',
+                'session' => true,        
+                'url'     => '/templateSoftware/index.php?action=home' 
+            ]);
         }
     }
 
