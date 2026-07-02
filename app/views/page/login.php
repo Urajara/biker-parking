@@ -1,6 +1,5 @@
 
 <div class="limiter">
-    <link rel="stylesheet" href="resources/library/css/login-style.css">
     <div class="login-page">
         <div class="login-box">
             <div class="logo">
