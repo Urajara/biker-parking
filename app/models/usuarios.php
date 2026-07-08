@@ -102,11 +102,15 @@
 
         public function editar(){
             try {
-                // Si el campo password viene vacío, no lo actualiza para no borrar la contraseña actual
-                if (!empty($this->password)) {
+                // Forzamos la limpieza de espacios en blanco
+                $this->password = isset($this->password) ? trim($this->password) : '';
+
+                // Si el campo password NO está completamente vacío, se encripta la nueva clave
+                if ($this->password !== '') {
                     $sql = "UPDATE usuarios SET cedula=:cedula, nombre=:nombre, apellido = :apellido, password = :password, id_rol = :id_rol, estatus = :estatus WHERE id = :id";
                     $passwordEncriptada = password_hash($this->password, PASSWORD_BCRYPT);
                 } else {
+                    // Si viene vacío, se actualizan los demás datos SIN tocar la contraseña existente
                     $sql = "UPDATE usuarios SET cedula=:cedula, nombre=:nombre, apellido = :apellido, id_rol = :id_rol, estatus = :estatus WHERE id = :id";
                 }
 
@@ -118,7 +122,7 @@
                 $stmt->bindparam(":estatus", $this->estatus, PDO::PARAM_INT);
                 $stmt->bindparam(":id", $this->id, PDO::PARAM_INT);
 
-                if (!empty($this->password)) {
+                if ($this->password !== '') {
                     $stmt->bindparam(":password", $passwordEncriptada, PDO::PARAM_STR);
                 }
 
@@ -132,7 +136,6 @@
             return $result;
             $conex = null;
         } #Fin Funcion
-
         public function eliminar(){
             try {
                 $sql = "DELETE FROM usuarios WHERE id = :id";
@@ -150,5 +153,36 @@
             return $result;
             $conex = null;
         } #Fin Funcion
+
+        // ==========================================
+        // NUEVO MÉTODO: Para validar el Login
+        // ==========================================
+        public function loginPorCedula(){
+            try {
+                // Buscamos al usuario por su cédula y traemos su hash de password y estatus
+                $sql = "SELECT id, cedula, nombre, apellido, password, id_rol, estatus 
+                        FROM usuarios 
+                        WHERE cedula = :cedula";
+
+                $stmt = parent::conectar()->prepare($sql);
+                $stmt->bindparam(":cedula", $this->cedula, PDO::PARAM_STR);
+                $stmt->execute();
+                
+                // Usamos fetch porque solo esperamos una fila o falso si no existe
+                $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if($data) {
+                    $result = array('success' => true, 'usuario' => $data);
+                } else {
+                    $result = array('success' => false, 'msj' => 'Usuario no encontrado');
+                }
+
+            } catch ( Exception $e ) {
+                $result = array('success' => false, 'error' => 1, 'msj' => $e->getMessage() );
+            }
+
+            return $result;
+            $conex = null;
+        }
     } #Fin clase
 ?>

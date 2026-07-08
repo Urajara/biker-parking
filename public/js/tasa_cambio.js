@@ -1,8 +1,25 @@
+
+
 $(document).ready(function(){
     listar();
     // Inicialización correcta de modales si es necesario
     $('#modal').modal({ show: false });
     $('#modalEditar').modal({ show: false });
+});
+
+// =================================================================================================
+//   FUNCIÓN: FILTRAR LA TABLA DE TASAS DE CAMBIO POR FECHA (BÚSQUEDA EN TIEMPO REAL)
+// =================================================================================================
+$(document).on('keyup', '#buscarEnTablaTasas', function() {
+    var query = $(this).val().toLowerCase().trim();
+    
+    // Filtramos las filas (tr) de la tabla de tasas de cambio
+    $("table tbody tr").filter(function() {
+        var contenidoFila = $(this).text().toLowerCase();
+        
+        // Muestra u oculta la fila según coincida con los caracteres de la fecha
+        $(this).toggle(contenidoFila.indexOf(query) > -1);
+    });
 });
 
 // -------------------------------------------------------------------------------------------------

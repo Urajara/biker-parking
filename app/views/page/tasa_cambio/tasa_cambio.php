@@ -16,7 +16,20 @@
                             <button type="hidden" style="display: none;" data-toggle="modal" data-target="#modalEditar" id="abrirModalEditar"> </button>
                         </div>
                         <div class="body table-responsive">
-                            <table class="table" id="tabla">
+
+                        <div class="row clearfix" style="margin-bottom: 15px; margin-top: 5px;">
+                            <div class="col-md-4 col-sm-6 col-xs-12">
+                                <div class="input-group" style="margin-bottom: 0px; display: flex; align-items: center;">
+                                    <span class="input-group-addon" style="padding-bottom: 0px; padding-top: 10px; margin-right: 10px;">
+                                        <i class="material-icons">search</i>
+                                    </span>
+                                    <div class="form-line" style="width: 100%;">
+                                        <input type="text" id="buscarEnTablaTasas" class="form-control" placeholder="Buscar fecha (AAAA-MM-DD)..." style="padding-left: 5px;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                                                    <table class="table" id="tabla">
                                 <thead>
                                     <tr>
                                         <th> # </th>

@@ -16,6 +16,20 @@
                             <button type="hidden" style="display: none;" data-toggle="modal" data-target="#modalEditar" id="abrirModalEditar"> </button>
                         </div>
                         <div class="body table-responsive">
+
+                        <!-- BUSCADOR EN TIEMPO REAL PARA LA TABLA (Añadido aquí) -->
+                        <div class="row clearfix" style="margin-bottom: 15px; margin-top: 5px;">
+                            <div class="col-md-4 col-sm-6 col-xs-12">
+                                <div class="input-group" style="margin-bottom: 0px;">
+                                    <span class="input-group-addon">
+                                        <i class="material-icons">search</i>
+                                    </span>
+                                    <div class="form-line">
+                                        <input type="text" id="buscarEnTablaClientes" class="form-control" placeholder="Buscar por cédula">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                             <table class="table" id="tabla">
                                 <thead>
                                     <tr>

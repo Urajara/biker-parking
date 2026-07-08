@@ -31,10 +31,11 @@
         // =========================================================================================
         // LISTAR (Tal como lo tenías, sin clientes.cedula)
         // =========================================================================================
-        public function listar(){
+    public function listar(){
             try {
                 $db = parent::conectar();
-                $sql = "SELECT vehiculo.id, vehiculo.placa, vehiculo.marca, vehiculo.modelo, vehiculo.color, vehiculo.id_cliente 
+                // AÑADIDO: clientes.cedula a la consulta SELECT
+                $sql = "SELECT vehiculo.id, vehiculo.placa, vehiculo.marca, vehiculo.modelo, vehiculo.color, vehiculo.id_cliente, clientes.cedula 
                         FROM vehiculo 
                         INNER JOIN clientes ON clientes.id = vehiculo.id_cliente";
 

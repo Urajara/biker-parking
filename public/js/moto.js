@@ -1,17 +1,21 @@
 // =================================================================================================
+//                      VARIABLES GLOBALES DEL MÓDULO
+// =================================================================================================
+// Almacena la lista de clientes que responde el servidor para buscar al instante sin recargar
+let listaClientesMemoria = []; 
+
+// =================================================================================================
 //                      INICIALIZACIÓN ÚNICA
 // =================================================================================================
 $(document).ready(function(){
-    listar();           // Carga la tabla de motos
-    obtenerClientes();  // Carga los selects de clientes en los modales
-    $('#modal').modal();
-    $('#modalEditar').modal();
+    listar();                      // Carga la tabla de motos
+    precargarClientesEnMemoria();  // Guarda los clientes en memoria para el buscador profesional
 });
 
 // =================================================================================================
-//                      OBTENER CLIENTES PARA LOS SELECTS
+//                      PRECARGAR CLIENTES EN MEMORIA (Buscador Profesional)
 // =================================================================================================
-function obtenerClientes() {
+function precargarClientesEnMemoria() {
     $.ajax({
         url: 'app/controllers/cliente.php', 
         type: 'POST',
@@ -20,32 +24,16 @@ function obtenerClientes() {
     })
     .done(function(response) {
         if (response.success) {
-            let options = '<option value="">-- Seleccione un Cliente --</option>';
-            
-            // CORRECCIÓN AQUÍ: Apuntamos con precisión milimétrica a la estructura de tu controlador
-            let listaClientes = response.data.datos;
-
-            if (listaClientes && listaClientes.length > 0) {
-                $.each(listaClientes, function(index, cliente) {
-                    options += `<option value="${cliente.id}">V-${cliente.cedula} - ${cliente.nombre} ${cliente.apellido}</option>`;
-                });
-            } else {
-                options = '<option value="">No hay clientes registrados</option>';
-            }
-            
-            // Inyectamos las opciones en ambos selectores del HTML
-            $('#id_cliente').html(options);
-            $('#id_clienteEditar').html(options);
-
+            // Guardamos el arreglo original de clientes en nuestra variable global
+            listaClientesMemoria = response.data.datos || [];
         } else {
-            $('#id_cliente').html('<option value="">Error al cargar clientes</option>');
-            $('#id_clienteEditar').html('<option value="">Error al cargar clientes</option>');
+            console.error("Error al precargar los clientes en memoria.");
         }
     });
 }
 
 // =================================================================================================
-//                                  LISTAR MOTOS
+//                                   LISTAR MOTOS
 // =================================================================================================
 function listar(){
     $.ajax({
@@ -64,7 +52,7 @@ function listar(){
                 html += `
                   <tr>
                     <td> ${val.id}</td>
-                    <td>V-${val.id_cliente}</td>
+                   <td>V-${val.cedula}</td>
                     <td> ${val.placa}</td>
                     <td> ${val.marca}</td>
                     <td> ${val.modelo}</td>
@@ -93,7 +81,7 @@ function listar(){
 }
 
 // =================================================================================================
-//                                  CREAR MOTO
+//                                   CREAR MOTO
 // =================================================================================================
 $('#guardar').click(function() {
     crear();
@@ -104,18 +92,12 @@ function crear() {
     var marca = $('#marca').val();
     var modelo = $('#modelo').val();
     var color = $('#color').val();
-    var id_cliente = $('#id_cliente').val(); // Captura el ID numérico del select
-
-    // Validación de seguridad para que no intente guardar si no han seleccionado un dueño
-   // if (id_cliente === "" || id_cliente === null) {
-     //   alert("Por favor, seleccione el dueño de la moto antes de guardar.");
-       // return false;
-   // }
-//alert("El JavaScript leyó este ID de cliente: '" + id_cliente + "'");
-    // ==========================================
+    
+    // IMPORTANTE: Sigue capturando el valor de #id_cliente (que ahora será tu campo oculto)
+    var id_cliente = $('#id_cliente').val(); 
 
     if (id_cliente === "" || id_cliente === null) {
-        alert("Por favor, seleccione el dueño de la moto antes de guardar.");
+        alert("Por favor, busque y seleccione el dueño de la moto antes de guardar.");
         return false;
     }
     $.ajax({
@@ -141,7 +123,10 @@ function crear() {
             $('#marca').val("");
             $('#modelo').val("");
             $('#color').val("");
+            
+            // Limpieza del buscador profesional
             $('#id_cliente').val("");
+            $('#buscarCedulaDueno').val("");
 
             alert('Su registro ha sido guardado con éxito');
         } else {
@@ -151,7 +136,7 @@ function crear() {
 }
 
 // =================================================================================================
-//                                  MODIFICAR MOTO (CONSULTAR)
+//                                   MODIFICAR MOTO (CONSULTAR)
 // =================================================================================================
 $("body").on("click","button.boton-update",function(){
     var id = $(this).attr("id");
@@ -175,7 +160,7 @@ $("body").on("click","button.boton-update",function(){
             $('#modeloEditar').val(data.data.datos[0].modelo);
             $('#colorEditar').val(data.data.datos[0].color);
             
-            // AGREGADO: Carga el dueño actual de la moto en el selector del modal editar
+            // Para el modal de edición mantendremos el select clásico por compatibilidad inmediata
             $('#id_clienteEditar').val(data.data.datos[0].id_cliente);
 
             $('#abrirModalEditar').click();
@@ -195,7 +180,7 @@ function editar() {
     var marca = $('#marcaEditar').val();
     var modelo = $('#modeloEditar').val();
     var color = $('#colorEditar').val();
-    var id_cliente = $('#id_clienteEditar').val(); // Captura el ID modificado del dueño
+    var id_cliente = $('#id_clienteEditar').val(); 
 
     $.ajax({
         url: 'app/controllers/moto.php',
@@ -208,7 +193,7 @@ function editar() {
             marca: marca,
             modelo: modelo,
             color: color,
-            id_cliente: id_cliente // <-- MANDAR AL CONTROLADOR DE PHP PARA EL UPDATE
+            id_cliente: id_cliente 
         },
     })
     .done(function(data) {
@@ -223,7 +208,7 @@ function editar() {
 }
 
 // =================================================================================================
-//                                  ELIMINAR MOTO
+//                                   ELIMINAR MOTO
 // =================================================================================================
 $("body").on("click","button.boton-borrar",function(){
     var id = $(this).attr("id");
@@ -246,7 +231,7 @@ function eliminar(id) {
             id: id
         },
     })
-    .done(function(data) { // CORRECCIÓN: Cambiado $.done por .done
+    .done(function(data) { 
         if (data.success) {
             listar();
             alert('Moto eliminada');
@@ -255,3 +240,76 @@ function eliminar(id) {
         }
     });
 }
+
+// =================================================================================================
+//       NUEVA FUNCIÓN: EVENTO DE BÚSQUEDA INTERNA DE DUEÑO (MODAL AGREGAR MOTO)
+// =================================================================================================
+$(document).on('keyup', '#buscarCedulaDueno', function() {
+    let criterio = $(this).val().trim().toLowerCase();
+    let listaFlotante = $('#sugerenciasClientes');
+    
+    // Si el buscador está vacío limpiamos el contenedor y el id oculto
+    if (criterio === "") {
+        listaFlotante.hide().empty();
+        $('#id_cliente').val('');
+        return;
+    }
+
+    let itemsHtml = '';
+    let coincidencias = 0;
+
+    // Filtramos los clientes cargados dinámicamente en memoria
+    $.each(listaClientesMemoria, function(index, cliente) {
+        let cedula = cliente.cedula.toLowerCase();
+        
+        if (cedula.indexOf(criterio) > -1) {
+            coincidencias++;
+            itemsHtml += `
+                <a href="javascript:void(0);" 
+                   class="list-group-item list-group-item-action item-seleccionar-cliente" 
+                   data-id="${cliente.id}" 
+                   data-visual="V-${cliente.cedula} - ${cliente.nombre} ${cliente.apellido}">
+                    👤 V-${cliente.cedula} - ${cliente.nombre} ${cliente.apellido}
+                </a>`;
+        }
+        
+        // Máximo 5 sugerencias en pantalla
+        if (coincidencias >= 5) return false; 
+    });
+
+    if (itemsHtml !== '') {
+        listaFlotante.html(itemsHtml).show();
+    } else {
+        listaFlotante.html('<div class="list-group-item text-muted">No se encontraron registros</div>').show();
+        $('#id_cliente').val('');
+    }
+});
+
+// Asignar el cliente seleccionado de la lista flotante
+$(document).on('click', '.item-seleccionar-cliente', function() {
+    let idObtenido = $(this).data('id');
+    let textoMostrar = $(this).data('visual');
+
+    $('#id_cliente').val(idObtenido);       // Se guarda el ID en el input hidden
+    $('#buscarCedulaDueno').val(textoMostrar); // Ponemos el nombre en el input de texto
+    $('#sugerenciasClientes').hide().empty(); // Cerramos las opciones flotantes
+});
+
+// Ocultar las sugerencias si el usuario da clic fuera del buscador
+$(document).click(function(event) {
+    if (!$(event.target).closest('#buscarCedulaDueno, #sugerenciasClientes').length) {
+        $('#sugerenciasClientes').hide();
+    }
+});
+
+// =================================================================================================
+//       NUEVA FUNCIÓN: FILTRAR LA TABLA PRINCIPAL DE MOTOS (BÚSQUEDA GENERAL)
+// =================================================================================================
+$(document).on('keyup', '#buscarEnTablaMotos', function() {
+    var query = $(this).val().toLowerCase().trim();
+    
+    $("table tbody tr").filter(function() {
+        var contenidoFila = $(this).text().toLowerCase();
+        $(this).toggle(contenidoFila.indexOf(query) > -1);
+    });
+});

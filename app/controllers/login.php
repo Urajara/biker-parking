@@ -16,7 +16,7 @@
             if (method_exists($this, $method)) {
                 return $this->$method($data);
             } else {
-                return $this->jsonResponse(['success' => false, 'message' => 'Acción no reconocida'], 404);
+                return $this->jsonResponse(['success' => false, 'error' => 'Acción no reconocida'], 404);
             }
         }
 
@@ -42,8 +42,9 @@
                 ]);
             }
 
-            // 2. SEGUNDO FILTRO: ¿La contraseña es correcta?
-            if ($datosUsuario['password'] !== $data['password']) {
+            // 2. SEGUNDO FILTRO: ¿La contraseña es correcta usando HASH de forma segura?
+            // CORREGIDO: password_verify valida el texto ingresado contra el Hash de la Base de Datos
+            if (!password_verify($data['password'], $datosUsuario['password'])) {
                 return $this->jsonResponse([
                     'success' => false,
                     'error' => 'Contraseña incorrecta'
@@ -52,17 +53,17 @@
 
             // 3. TERCER FILTRO: Estado del usuario
             switch ($datosUsuario['estatus']) {
-                case '1':
+                case '0':
                     return $this->jsonResponse(['success' => false, 'error' => 'Usuario inactivo']);
                 case '2':
                     return $this->jsonResponse(['success' => false, 'error' => 'Usuario bloqueado']);
-                case '0':
+                case '1':
                 default:
                     break;
             }    
 
             // 4. FLUJO DE ÉXITO: Guardamos en sesión usando la estructura de tu BaseController
-$this->startSession();
+            $this->startSession();
 
             $_SESSION['id']       = $datosUsuario['id'] ?? '';
             $_SESSION['cedula']   = $datosUsuario['cedula'];
